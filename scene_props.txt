@@ -1,5 +1,5 @@
 scene_propsfile version 1
- 1538
+ 1560
 spr_invalid_object 0 0 question_mark 0 0
 
 
@@ -4049,7 +4049,7 @@ spr_skybox_night_1 0 0 skybox_night_1_prop 0 0
 spr_skybox_sunset_1 0 0 skybox_sunset_1_prop 0 0
 
 
-spr_skybox_space 0 0 compass_prop 0 0
+spr_skybox_space 0 0 skybox_space_prop 0 0
 
 
 spr_skybox_vjun 0 0 skybox_vjun 0 0
@@ -4288,28 +4288,31 @@ spr_naboo_chair_2 0 0 naboo_chair_2 bo_naboo_chair_2 0
 spr_sundari_peace_park 0 0 sundari_peace_park bo_sundari_peace_park 0
 
 
-spr_sundari_block_1 0 0 sundari_block_1 0 0
+spr_sundari_block_1 0 0 sundari_block_1 bo_sundari_block_1 0
 
 
-spr_sundari_block_2 0 0 sundari_block_2 0 0
+spr_sundari_block_2 0 0 sundari_block_2 bo_sundari_block_2 0
 
 
-spr_sundari_block_3 0 0 sundari_block_3 0 0
+spr_sundari_block_3 0 0 sundari_block_3 bo_sundari_block_3 0
 
 
-spr_sundari_block_4 0 0 sundari_block_4 0 0
+spr_sundari_block_4 0 0 sundari_block_4 bo_sundari_block_4 0
 
 
-spr_sundari_block_5 0 0 sundari_block_5 0 0
+spr_sundari_block_5 0 0 sundari_block_5 bo_sundari_block_5 0
 
 
-spr_sundari_small_block_1 0 0 sundari_small_block_1 0 0
+spr_sundari_block_6 0 0 sundari_block_6 bo_sundari_block_6 0
 
 
-spr_sundari_small_block_2 0 0 sundari_small_block_2 0 0
+spr_sundari_small_block_1 0 0 sundari_small_block_1 bo_sundari_small_block_1 0
 
 
-spr_sundari_small_block_3 0 0 sundari_small_block_3 0 0
+spr_sundari_small_block_2 0 0 sundari_small_block_2 bo_sundari_small_block_2 0
+
+
+spr_sundari_small_block_3 0 0 sundari_small_block_3 bo_sundari_small_block_3 0
 
 
 spr_endor_walkway 0 0 endor_walkway bo_endor_walkway 0
@@ -4658,6 +4661,69 @@ spr_sarapin_fac_terminal7 0 0 sarapin_fac_terminal7 bo_sarapin_fac_terminal7 0
 
 
 spr_sarapin_fac_drill 0 0 sarapin_fac_drill bo_sarapin_fac_drill 0
+
+
+spr_christophisis_arena 0 0 christophisis_arena bo_christophisis_arena 0
+
+
+spr_deathstar_parts_1_door_static 0 0 deathstar_parts_1_door_static bo_deathstar_parts_1_door_static 0
+
+
+spr_echo_base_outer 0 0 echo_base_outer bo_echo_base_outer 0
+
+
+spr_outer_snow 0 0 outer_snow 0 0
+
+
+spr_ahto_wall_small 0 0 ahto_wall_small bo_ahto_wall_small 0
+
+
+spr_ahto_wall_tiny 0 0 ahto_wall_tiny bo_ahto_wall_tiny 0
+
+
+spr_ahto_cube 0 0 ahto_cube bo_ahto_cube 0
+
+
+spr_dantooine_path_1 0 0 dantooine_path_1 bo_dantooine_path_1 0
+
+
+spr_dantooine_path_2 0 0 dantooine_path_2 bo_dantooine_path_2 0
+
+
+spr_dantooine_path_3 0 0 dantooine_path_3 bo_dantooine_path_3 0
+
+
+spr_dantooine_building_1 0 0 dantooine_building_1 bo_dantooine_building_1 0
+
+
+spr_dantooine_building_2 0 0 dantooine_building_2 bo_dantooine_building_2 0
+
+
+spr_dantooine_stone 0 0 dantooine_stone bo_dantooine_stone 0
+
+
+spr_dantooine_building_3 0 0 dantooine_building_3 bo_dantooine_building_3 0
+
+
+spr_dantooine_building_4 0 0 dantooine_building_4 bo_dantooine_building_4 0
+
+
+spr_dantooine_building_5 0 0 dantooine_building_5 bo_dantooine_building_5 0
+
+
+spr_dantooine_block 0 0 dantooine_block bo_dantooine_block 0
+
+
+spr_skybox_sundari 0 0 skybox_sundari 0 0
+
+
+spr_sundari_battle 0 0 sundari_battle bo_sundari_battle 0
+
+
+spr_hutt_arena 0 0 hutt_arena bo_hutt_arena 0
+
+
+spr_kashyyyk_floor 0 0 kashyyyk_floor bo_kashyyyk_floor 0
 
 
 spr_scene_props_end 16384 0 psys_helper 0 0

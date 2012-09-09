@@ -11,7 +11,7 @@ pt_bountyhunters Trandoshan_Slavers 27 0 20 137 211 25 50 0 24 0 1 1 -1 -1 -1 -1
 pt_night_fang_pirates Night_Fangs_Pirates 562949953421345 0 2 344 207 5 25 0 208 4 8 0 51 1 5 0 43 1 5 0 40 0 1 1 -1 
 pt_blazing_claw_pirates Blazing_Claw_Pirates 562949953421344 0 23 344 205 5 25 0 206 4 8 0 47 1 5 0 67 1 5 0 40 0 1 1 -1 
 pt_tusken_raiders Tusken_Raiders 562949953421353 0 2 344 209 10 25 0 210 5 10 0 -1 -1 -1 -1 
-pt_black_sun_pirates Black_Sun_Pirates 562949953421337 0 22 344 201 10 20 0 202 5 10 0 203 5 10 0 204 1 10 0 40 0 1 1 -1 
+pt_black_sun_pirates Black_Sun_Pirates 562949953421337 0 22 344 201 10 20 0 202 5 10 0 203 5 10 0 204 2 15 0 40 0 1 1 -1 
 pt_deserters Deserters 844424930131995 0 21 344 -1 -1 -1 -1 -1 -1 
 pt_galacticempire_escort Patrol_Fleet 562949957681179 0 1 172 81 1 1 0 -1 -1 -1 -1 -1 
 pt_independent_traders Merchant_Convoy 5629499534475295 0 1 11 213 1 1 0 100 1 10 0 99 1 1 0 85 10 20 0 -1 -1 
