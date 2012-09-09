@@ -707,6 +707,22 @@ VS_OUTPUT_FONT vs_font(float4 vPosition : POSITION, float4 vColor : COLOR, float
 
 	Out.Tex0 = tc;
 	Out.Color = vColor * vMaterialColor;
+	
+	
+	/*
+	  Replace hardcoded menu colors--
+	  Yellow: #fddd0b
+	  DGreen: #218221
+	  BBrown: #d4c5b5
+	  BGreen: #7cfd78
+	 */
+
+	if( Out.Color.r == 1.0f
+	 && Out.Color.g >= 0.86f
+	 && Out.Color.g <= 0.87f
+	 && Out.Color.b == 0.0f){
+		Out.Color.rgb = float3(0.0f,0.0f,1.0f);  //--> We like blue.
+	}
 
 	//apply fog
 	float d = length(P);
@@ -744,9 +760,10 @@ VS_OUTPUT_FONT vs_swconquest_galaxy(float4 vPosition : POSITION, float4 vColor :
 }
 
 PS_OUTPUT ps_font_uniform_color(PS_INPUT_FONT In)
-{
+{	
 	PS_OUTPUT Output;
 	Output.RGBColor =  In.Color;
+	
 	Output.RGBColor.a *= tex2D(FontTextureSampler, In.Tex0).a;
 	return Output;
 }
@@ -1166,13 +1183,34 @@ VS_OUTPUT vs_main (uniform const int PcfMode, uniform const bool UseSecondLight,
 	return Out;
 }
 
-PS_OUTPUT ps_main(PS_INPUT In, uniform const int PcfMode, uniform const bool isGlowEnabled)
+PS_OUTPUT ps_main(PS_INPUT In, uniform const int PcfMode, uniform const bool isGlowEnabled = false, uniform const bool isLavaEnabled = false)
 {
 	PS_OUTPUT Output;
+	
+	float4 tex_col = float4(0,0,0,0); //makes happy the dumb fx compiler :(
+	
+	if(isLavaEnabled){
+	
+		float time = sin(cos(time_var/32));
+	
+		float4 tex_cola = tex2D(MeshTextureSampler,     In.Tex0     +time    );
+		float4 tex_colb = tex2D(Diffuse2Sampler,   (sin(In.Tex0)*cos(time))*2);
+		float4 tex_colc = tex2D(Diffuse2Sampler,    cos(In.Tex0)*sin(time)   );
+		
+		tex_col = tex_cola;
 
-	float4 tex_col = tex2D(MeshTextureSampler, In.Tex0);
-
-	tex_col.rgb = pow(tex_col.rgb, input_gamma);
+	
+		tex_col.rgb *= tex_colb.rgb;
+		tex_col.rgb *= tex_colc.rgb;
+		
+		tex_col.rgb *= (tex_colc.rgb+tex_colc.rgb+tex_cola.rgb);//*tex_cola.rgb;
+	
+	}else{
+	
+		tex_col = tex2D(MeshTextureSampler, In.Tex0);
+		tex_col.rgb = pow(tex_col.rgb, input_gamma);
+	}
+	
 	
 	if(isGlowEnabled)
 	{
@@ -1183,11 +1221,16 @@ PS_OUTPUT ps_main(PS_INPUT In, uniform const int PcfMode, uniform const bool isG
 	{
 		float sun_amount = GetSunAmount(PcfMode, In.ShadowTexCoord, In.TexelPos);
 		// sun_amount *= sun_amount;
-		Output.RGBColor =  tex_col * ((In.Color + In.SunLight * sun_amount));
+		Output.RGBColor = tex_col * (In.Color + In.SunLight * sun_amount);
+
 	}
 	else
 	{
-		Output.RGBColor = tex_col * (In.Color + In.SunLight);
+		if(isGlowEnabled){
+			Output.RGBColor = tex_col * In.Color * In.SunLight; //vertx color multiplication fix
+		}else{
+			Output.RGBColor = tex_col * (In.Color + In.SunLight);
+		}
 	}
 	
 	// gamma correct
@@ -1245,11 +1288,17 @@ PS_OUTPUT ps_swconquest_lightsaber(PS_INPUT In)
 {
 	PS_OUTPUT Output;
 	
-	Output.RGBColor = tex2D(MeshTextureSampler, In.Tex0) * In.Color;
-
+	//we don't want to draw the hilt :-)
+	if(In.Tex0.x > 0.8f){
+		//clip(-1);
+		In.Color.a=0.0f;
+	}
+	
+	Output.RGBColor = tex2D(MeshTextureSampler, In.Tex0);
+	Output.RGBColor.a *= In.Color.a;
+	
 	return Output;
 }
-
 
 VS_OUTPUT vs_main_skin (float4 vPosition : POSITION, float3 vNormal : NORMAL, float2 tc : TEXCOORD0, float4 vColor : COLOR, float4 vBlendWeights : BLENDWEIGHT, float4 vBlendIndices : BLENDINDICES, uniform const int PcfMode)
 {
@@ -2453,7 +2502,7 @@ VS_OUTPUT_SPECULAR_ALPHA vs_specular_alpha (uniform const int PcfMode, float4 vP
 
 
 
-PS_OUTPUT ps_specular_alpha(PS_INPUT_SPECULAR_ALPHA In, uniform const int PcfMode, uniform const bool isGlowEnabled)
+PS_OUTPUT ps_specular_alpha(PS_INPUT_SPECULAR_ALPHA In, uniform const int PcfMode, uniform const bool isGlowEnabled, uniform const bool isLightsaber)
 {
 	PS_OUTPUT Output;
 
@@ -2470,6 +2519,14 @@ PS_OUTPUT ps_specular_alpha(PS_INPUT_SPECULAR_ALPHA In, uniform const int PcfMod
 	if(isGlowEnabled)
 	{
 		In.SunLight -= outColor.a;
+	}
+	
+	if(isLightsaber)
+	{
+		//we don't want to draw the lightblade in metallic fashion :-)
+		if(In.Tex0.x < 0.811f){
+			clip(-1);
+		}
 	}
 	
 	if ((PcfMode != PCF_NONE))
@@ -2714,11 +2771,24 @@ technique swconquest_hologram_static
 
 technique swconquest_lightsaber
 {
-	pass P0
+
+	pass Lightblade
 	{
+		SrcBlend = SrcAlpha;
+		DestBlend = One;
 		VertexShader = compile vs_2_0 vs_swconquest_lightsaber();
 		PixelShader  = compile ps_2_0 ps_swconquest_lightsaber();
 	}
+	
+	pass Hilt
+	{
+		SrcBlend = SrcAlpha; 
+		DestBlend = InvSrcAlpha;
+		VertexShader = compile vs_2_0 vs_specular_alpha(PCF_NONE);
+		PixelShader  = compile ps_2_0 ps_specular_alpha(PCF_NONE,false, true); //special parameter for clipping out the lightblade parts
+	}
+	
+
 }
 
 technique swconquest_glow
@@ -2744,9 +2814,19 @@ technique swconquest_glow_iron
 	pass P0
 	{
 		VertexShader = compile vs_2_0 vs_specular_alpha(PCF_NONE);
-		PixelShader  = compile ps_2_0 ps_specular_alpha(PCF_NONE,true); //glow_enabled
+		PixelShader  = compile ps_2_0 ps_specular_alpha(PCF_NONE, true, false); //glow_enabled
 	}
 }
+
+technique swconquest_lava
+{
+	pass P0
+	{
+		VertexShader = compile vs_2_0 vs_main(PCF_NONE, false);
+		PixelShader  = compile ps_2_0 ps_main(PCF_NONE, false, true);
+	}
+}
+
 
 //the technique for the programmable shader (simply sets the vertex shader)
 technique font_uniform_color
@@ -3383,7 +3463,7 @@ technique specular_alpha
 	pass P0
 	{
 		VertexShader = compile vs_2_0 vs_specular_alpha(PCF_NONE);
-		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_NONE, false);
+		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_NONE, false, false);
 	}
 }
 technique specular_alpha_SHDW
@@ -3391,7 +3471,7 @@ technique specular_alpha_SHDW
 	pass P0
 	{
 		VertexShader = compile vs_2_0 vs_specular_alpha(PCF_DEFAULT);
-		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_DEFAULT, false);
+		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_DEFAULT, false, false);
 	}
 }
 technique specular_alpha_SHDWNVIDIA
@@ -3399,7 +3479,7 @@ technique specular_alpha_SHDWNVIDIA
 	pass P0
 	{
 		VertexShader = compile vs_2_a vs_specular_alpha(PCF_NVIDIA);
-		PixelShader = compile ps_2_a ps_specular_alpha(PCF_NVIDIA, false);
+		PixelShader = compile ps_2_a ps_specular_alpha(PCF_NVIDIA, false, false);
 	}
 }
 
@@ -3408,7 +3488,7 @@ technique specular_alpha_skin
 	pass P0
 	{
 		VertexShader = compile vs_2_0 vs_specular_alpha_skin(PCF_NONE);
-		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_NONE, false);
+		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_NONE, false, false);
 	}
 }
 technique specular_alpha_skin_SHDW
@@ -3416,7 +3496,7 @@ technique specular_alpha_skin_SHDW
 	pass P0
 	{
 		VertexShader = compile vs_2_0 vs_specular_alpha_skin(PCF_DEFAULT);
-		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_DEFAULT, false);
+		PixelShader = compile ps_2_0 ps_specular_alpha(PCF_DEFAULT, false, false);
 	}
 }
 technique specular_alpha_skin_SHDWNVIDIA
@@ -3424,6 +3504,6 @@ technique specular_alpha_skin_SHDWNVIDIA
 	pass P0
 	{
 		VertexShader = compile vs_2_a vs_specular_alpha_skin(PCF_NVIDIA);
-		PixelShader = compile ps_2_a ps_specular_alpha(PCF_NVIDIA, false);
+		PixelShader = compile ps_2_a ps_specular_alpha(PCF_NVIDIA, false, false);
 	}
 }
