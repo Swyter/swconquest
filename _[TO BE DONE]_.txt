@@ -1,0 +1,55 @@
+[!] This is our Milestone for SWC 0.9.0.4                                                 /
+---------------------------------------------                                            /
+Feel free to add and remove lines as you want. We'll keep it ordered from here now.     /
+Legend: [X] Done  [/] W.I.P.   [-] Not Started                                         /
+______________________________________________________________________________________/
+
+//-------> MAXIMUM PRIORITY
+
+[/] Do Scene Editing for the ~8 Main Planets with Props
+ -yavin iv 
+ -coruscant
+ -naboo
+ -taris 
+ -mandalore
+ -Endor
+
+ 
+[-] New Wookie Skin + Heads
+
+[-] New Jawa & Tusken models (Current ones are from Legacy and badly need some attention) 
+
+[-] New Stormtrooper Officer Skin
+ -currently using placeholder, only armor needed
+
+
+//--------> MEDIUM PRIORITY
+
+[/] Update the Interface
+ -swy- i'm on it
+
+[/] Resource cleanup and relocation
+ -swy- i'm on it
+ 
+[-] Turn blue normalmaps into green ones.
+ move the red channel into the alpha channel instead, and drop the blue channel (which can be calculated anyway)
+ 
+[-] Do Generic Minorplanet Scene Editing
+ -needs sprops
+
+[-] Add further shaders
+ -imperial reflective wax surface
+ -planet icon fx
+ 
+[/] Reported Gameplay Bug Fixes
+
+[-] Add reskins
+
+[X] Add Yiyangchen's Stormtrooper armors to "Imperial Deserter Party"
+
+//--------> LOW PRIORITY
+
+[X] Finish the tiny (5kb) Launcher in Assembler
+
+[-] Dialog Fixes
+
